@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>RazorMailMessage</id>
+    <version>0.1</version>
+    <authors>Robin van der Knaap</authors>
+    <owners>Robin van der Knaap</owners>
+    <licenseUrl>https://github.com/robinvanderknaap/RazorMailMessage</licenseUrl>
+    <projectUrl>https://github.com/robinvanderknaap/RazorMailMessage</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>RazorMailMessage enables you to create .NET MailMessage objects based on Razor templates. Support for layouts, sections, multi-part messages. No dependency on ASP.NET MVC.</description>
+    <tags>Mail, Email, MailMessage, Razor, RazorMail, RazorEmail, RazorMailMessage</tags>
+	<dependencies>
+      <dependency id="RazorEngine" version="3.3.0" />	
+    </dependencies> 
+  </metadata>   
+</package>
