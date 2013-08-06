@@ -4,7 +4,7 @@ namespace RazorMailMessage.TemplateResolvers
 {
     public interface ITemplateResolver
     {
-        string ResolveTemplate(string templateName, bool isPlainText);
+        string ResolveTemplate(string templateName, bool isPlainText, CultureInfo cultureInfo);
         string ResolveLayout(string layoutName);
     }
 }

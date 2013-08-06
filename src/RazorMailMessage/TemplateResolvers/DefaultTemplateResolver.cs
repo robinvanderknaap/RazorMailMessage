@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Resources;
 
 namespace RazorMailMessage.TemplateResolvers
 {
@@ -19,14 +19,14 @@ namespace RazorMailMessage.TemplateResolvers
             _nameSpace = nameSpace;
         }
 
-        public string ResolveTemplate(string templateName, bool isPlainText)
+        public string ResolveTemplate(string templateName, bool isPlainText, CultureInfo cultureInfo)
         {
             if (string.IsNullOrWhiteSpace(templateName))
             {
                 throw new ArgumentNullException("templateName");
             }
             
-            // Convention: assembly:namespace.templatename.csthml (assembly is optional)
+            // Convention: assemblyName::namespace.templatename.csthml (assembly is optional)
             var templateNameParts = templateName.Split(new[] { "::" }, StringSplitOptions.None);
             
             // Get assembly containing template
@@ -44,23 +44,30 @@ namespace RazorMailMessage.TemplateResolvers
                 ? _nameSpace.Split('.').Concat(resourceName.Split('.')).ToList()
                 : resourceName.Split('.').ToList();
 
-            // Remove .cshtml part
+            // Remove extension from resource name
+            var extensionPart = resourceNameParts.ElementAt(resourceNameParts.Count - 1);
             resourceNameParts.RemoveAt(resourceNameParts.Count - 1);
 
-            if (isPlainText)
+            // Add culture to resource name
+            if (!cultureInfo.Equals(CultureInfo.InvariantCulture))
             {
-                resourceNameParts.Add("text");
+                resourceNameParts.Add(cultureInfo.Name);
             }
 
-            resourceNameParts.Add("cshtml");
+            // Add template type (text or html) ro resource name
+            resourceNameParts.Add(isPlainText ? "text" : "html");
 
+            // Add extension back
+            resourceNameParts.Add(extensionPart);
+
+            // Construct full resource name
             var fullResourceName =  assembly.GetName().Name + "." + string.Join(".", resourceNameParts);
 
             using (var template = assembly.GetManifestResourceStream(fullResourceName))
             {
                 if (template == null)
                 {
-                    throw new MissingManifestResourceException(string.Format("Could not retrieve resource '{0}'", fullResourceName));
+                    return null;
                 }
 
                 using (var streamReader = new StreamReader(template))
@@ -72,7 +79,7 @@ namespace RazorMailMessage.TemplateResolvers
 
         public string ResolveLayout(string layoutName)
         {
-            return ResolveTemplate(layoutName, false);
+            return ResolveTemplate(layoutName, false, null);
         }
     }
 }
