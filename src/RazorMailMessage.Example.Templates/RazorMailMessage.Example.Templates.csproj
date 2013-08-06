@@ -45,14 +45,14 @@
     <EmbeddedResource Include="MailTemplates\Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MailTemplates\TestTemplate.cshtml" />
+    <EmbeddedResource Include="MailTemplates\TestTemplate.html.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MailTemplates\TestTemplate.text.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MailTemplates\SendEmailWithEmbeddedImage\MailLayout.cshtml" />
-    <EmbeddedResource Include="MailTemplates\SendEmailWithEmbeddedImage\TestTemplate.cshtml" />
+    <EmbeddedResource Include="MailTemplates\SendEmailWithEmbeddedImage\TestTemplate.html.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MailTemplates\SendEmailWithEmbeddedImage\TestTemplate.text.cshtml" />

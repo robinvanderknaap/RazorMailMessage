@@ -21,14 +21,24 @@ namespace RazorMailMessage.TemplateResolvers
 
         public string ResolveTemplate(string templateName, bool isPlainText, CultureInfo cultureInfo)
         {
+            return ResolveTemplate(templateName, isPlainText, cultureInfo, isLayout:false);
+        }
+
+        public string ResolveLayout(string layoutName)
+        {
+            return ResolveTemplate(layoutName, false, CultureInfo.InvariantCulture, isLayout:true);
+        }
+
+        private string ResolveTemplate(string templateName, bool isPlainText, CultureInfo cultureInfo, bool isLayout)
+        {
             if (string.IsNullOrWhiteSpace(templateName))
             {
                 throw new ArgumentNullException("templateName");
             }
-            
+
             // Convention: assemblyName::namespace.templatename.csthml (assembly is optional)
-            var templateNameParts = templateName.Split(new[] { "::" }, StringSplitOptions.None);
-            
+            var templateNameParts = templateName.Split(new[] {"::"}, StringSplitOptions.None);
+
             // Get assembly containing template
             // Order to look for:
             // - Assembly as specified in template name
@@ -41,27 +51,30 @@ namespace RazorMailMessage.TemplateResolvers
             var resourceName = templateNameParts.Count() > 1 ? templateNameParts[1] : templateName;
 
             var resourceNameParts = !string.IsNullOrWhiteSpace(_nameSpace) && templateNameParts.Count() == 1
-                ? _nameSpace.Split('.').Concat(resourceName.Split('.')).ToList()
-                : resourceName.Split('.').ToList();
+                                        ? _nameSpace.Split('.').Concat(resourceName.Split('.')).ToList()
+                                        : resourceName.Split('.').ToList();
 
-            // Remove extension from resource name
-            var extensionPart = resourceNameParts.ElementAt(resourceNameParts.Count - 1);
-            resourceNameParts.RemoveAt(resourceNameParts.Count - 1);
-
-            // Add culture to resource name
-            if (!cultureInfo.Equals(CultureInfo.InvariantCulture))
+            if (!isLayout) // Don't alter the resource name if specified as layout
             {
-                resourceNameParts.Add(cultureInfo.Name);
+                // Remove extension from resource name
+                var extensionPart = resourceNameParts.ElementAt(resourceNameParts.Count - 1);
+                resourceNameParts.RemoveAt(resourceNameParts.Count - 1);
+
+                // Add culture to resource name
+                if (!cultureInfo.Equals(CultureInfo.InvariantCulture))
+                {
+                    resourceNameParts.Add(cultureInfo.Name);
+                }
+
+                // Add template type (text or html) ro resource name
+                resourceNameParts.Add(isPlainText ? "text" : "html");
+
+                // Add extension back
+                resourceNameParts.Add(extensionPart);
             }
 
-            // Add template type (text or html) ro resource name
-            resourceNameParts.Add(isPlainText ? "text" : "html");
-
-            // Add extension back
-            resourceNameParts.Add(extensionPart);
-
             // Construct full resource name
-            var fullResourceName =  assembly.GetName().Name + "." + string.Join(".", resourceNameParts);
+            var fullResourceName = assembly.GetName().Name + "." + string.Join(".", resourceNameParts);
 
             using (var template = assembly.GetManifestResourceStream(fullResourceName))
             {
@@ -77,9 +90,6 @@ namespace RazorMailMessage.TemplateResolvers
             }
         }
 
-        public string ResolveLayout(string layoutName)
-        {
-            return ResolveTemplate(layoutName, false, null);
-        }
+        
     }
 }

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
 using System.Reflection;
 using System.Text;
+using RazorMailMessage.TemplateBase;
 using RazorMailMessage.TemplateCache;
 using RazorMailMessage.TemplateResolvers;
 
@@ -81,7 +83,8 @@ namespace RazorMailMessage.Example
             var razorMailMessageFactory = new RazorMailMessageFactory
             (
                 new DefaultTemplateResolver(Assembly.Load("RazorMailMessage.Example.Templates"), "MailTemplates"),
-                new InMemoryTemplateCache()
+                new InMemoryTemplateCache(),
+                typeof(DefaultTemplateBase<>)
             );
 
             var mailMessage = razorMailMessageFactory.Create("TestTemplate.cshtml", new { Name = "Robin" });
@@ -98,15 +101,20 @@ namespace RazorMailMessage.Example
             var razorMailMessageFactory = new RazorMailMessageFactory
             (
                 new DefaultTemplateResolver(Assembly.Load("RazorMailMessage.Example.Templates"), "MailTemplates"),
-                new InMemoryTemplateCache()
+                new InMemoryTemplateCache(),
+                typeof(DefaultTemplateBase<>)
             );
 
-            var mailMessage = razorMailMessageFactory.Create("SendEmailWithEmbeddedImage.TestTemplate.cshtml", new { Name = "Robin" });
+            var mailMessage = razorMailMessageFactory.Create
+            (
+                "SendEmailWithEmbeddedImage.TestTemplate.cshtml", 
+                new { Name = "Robin" },
+                new List<LinkedResource> { new LinkedResource("chucknorris.jpg") { ContentId = "chuckNorrisImage" } }
+            );
 
             mailMessage.From = new MailAddress(_fromEmailAddress);
             mailMessage.To.Add(new MailAddress(_toEmailAddress));
             mailMessage.Subject = "This shouls be an English text";
-            mailMessage.AlternateViews.First().LinkedResources.Add(new LinkedResource("chucknorris.jpg") { ContentId = "chuckNorrisImage" });
 
             SmtpClient.Send(mailMessage);
         }
