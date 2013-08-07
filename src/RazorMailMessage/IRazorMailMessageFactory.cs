@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using System.Net.Mail;
 
 namespace RazorMailMessage
@@ -8,7 +7,5 @@ namespace RazorMailMessage
     {
         MailMessage Create<TModel>(string templateName, TModel model);
         MailMessage Create<TModel>(string templateName, TModel model, IEnumerable<LinkedResource> linkedResources);
-        MailMessage Create<TModel>(string templateName, TModel model, CultureInfo cultureInfo);
-        MailMessage Create<TModel>(string templateName, TModel model, CultureInfo cultureInfo, IEnumerable<LinkedResource> linkedResources);
     }
 }

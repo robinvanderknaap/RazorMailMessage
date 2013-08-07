@@ -66,9 +66,14 @@ namespace RazorMailMessage.Example
 
         private static void SendMailMessageWithDefaultSettings()
         {
-            var razorMailMessageFactory = new RazorMailMessageFactory();
+            var razorMailMessageFactory = new RazorMailMessageFactory
+            (
+                new DefaultTemplateResolver(Assembly.Load("RazorMailMessage.Example.Templates"), "MailTemplates"),
+                new InMemoryTemplateCache(),
+                typeof(DefaultTemplateBase<>)
+            );
 
-            var mailMessage = razorMailMessageFactory.Create("RazorMailMessage.Example.Templates::MailTemplates.TestTemplate.cshtml", new { Name = "Robin" });
+            var mailMessage = razorMailMessageFactory.Create("TestTemplate.resources", new { Name = "Robin" });
 
             mailMessage.From = new MailAddress(FromEmailAddress);
             mailMessage.To.Add(new MailAddress(ToEmailAddress));

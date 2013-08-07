@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.IO;
 using Moq;
 using NUnit.Framework;
@@ -19,12 +18,12 @@ namespace RazorMailMessage.Tests
 
             // Request for html template
             templateResolverMock
-                .Setup(x => x.ResolveTemplate(It.IsAny<string>(), false, It.IsAny<CultureInfo>()))
+                .Setup(x => x.ResolveTemplate(It.IsAny<string>(), false))
                 .Returns("<b>Welcome @Model.Name</b>");
 
             // Request for plain text template returns empty string (indicating the plain text template should no be used)
             templateResolverMock
-                .Setup(x => x.ResolveTemplate(It.IsAny<string>(), true, It.IsAny<CultureInfo>()))
+                .Setup(x => x.ResolveTemplate(It.IsAny<string>(), true))
                 .Returns("");
 
             var razorMailMessageFactory = new RazorMailMessageFactory(templateResolverMock.Object, new Mock<ITemplateCache>().Object, typeof(DefaultTemplateBase<>));
@@ -44,12 +43,12 @@ namespace RazorMailMessage.Tests
 
             // Request for html template
             templateResolverMock
-                .Setup(x => x.ResolveTemplate(It.IsAny<string>(), false, It.IsAny<CultureInfo>()))
+                .Setup(x => x.ResolveTemplate(It.IsAny<string>(), false))
                 .Returns("<b>Welcome @Model.Name</b>");
             
             // Setup plain text template request
             templateResolverMock
-                    .Setup(x => x.ResolveTemplate(It.IsAny<string>(), true, It.IsAny<CultureInfo>()))
+                    .Setup(x => x.ResolveTemplate(It.IsAny<string>(), true))
                     .Returns("Welcome @Model.Name");
 
             var razorMailMessageFactory = new RazorMailMessageFactory(templateResolverMock.Object, new Mock<ITemplateCache>().Object, typeof(DefaultTemplateBase<>));
@@ -77,12 +76,12 @@ namespace RazorMailMessage.Tests
 
             // Request for html template
             templateResolverMock
-                .Setup(x => x.ResolveTemplate("TestTemplate", false, It.IsAny<CultureInfo>()))
+                .Setup(x => x.ResolveTemplate("TestTemplate", false))
                 .Returns("@{ Layout = \"TestLayout\";}<b>Welcome @Model.Name</b>");
 
             // Request for plain text template returns empty string (indicating the plain text template should no be used)
             templateResolverMock
-                .Setup(x => x.ResolveTemplate("TestTemplate", true, It.IsAny<CultureInfo>()))
+                .Setup(x => x.ResolveTemplate("TestTemplate", true))
                 .Returns("");
 
             var razorMailMessageFactory = new RazorMailMessageFactory(templateResolverMock.Object, new Mock<ITemplateCache>().Object, typeof(DefaultTemplateBase<>));
@@ -107,12 +106,12 @@ namespace RazorMailMessage.Tests
 
             // Request for html template
             templateResolverMock
-                .Setup(x => x.ResolveTemplate("TestTemplate", false, It.IsAny<CultureInfo>()))
+                .Setup(x => x.ResolveTemplate("TestTemplate", false))
                 .Returns("@{ Layout = \"TestLayout\";}<b>Welcome @Model.Name</b>");
 
             // Request for plain text template
             templateResolverMock
-                .Setup(x => x.ResolveTemplate("TestTemplate", true, It.IsAny<CultureInfo>()))
+                .Setup(x => x.ResolveTemplate("TestTemplate", true))
                 .Returns("@{ Layout = \"TestLayout\";}Welcome @Model.Name");
 
             var razorMailMessageFactory = new RazorMailMessageFactory(templateResolverMock.Object, new Mock<ITemplateCache>().Object, typeof(DefaultTemplateBase<>));
@@ -166,8 +165,8 @@ namespace RazorMailMessage.Tests
             Assert.AreEqual(expectedResult, new StreamReader(mailMessage.AlternateViews[0].ContentStream).ReadToEnd());
             Assert.AreEqual(expectedPlainTextResult, mailMessage.Body);
 
-            templateResolverMock.Verify(x => x.ResolveTemplate("TestTemplate", false, It.IsAny<CultureInfo>()), Times.Never());
-            templateResolverMock.Verify(x => x.ResolveTemplate("TestTemplate", true, It.IsAny<CultureInfo>()), Times.Never());
+            templateResolverMock.Verify(x => x.ResolveTemplate("TestTemplate", false), Times.Never());
+            templateResolverMock.Verify(x => x.ResolveTemplate("TestTemplate", true), Times.Never());
 
             // Layout is used twice, once for html, once for text. Layout should be resolved once though, because of the caching of the razor engine itself.
             templateResolverMock.Verify(x => x.ResolveLayout("TestLayout"), Times.Once()); 

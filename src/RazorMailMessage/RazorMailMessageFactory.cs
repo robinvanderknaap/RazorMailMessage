@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Net.Mail;
 using System.Net.Mime;
 using System.Text;
@@ -53,33 +52,21 @@ namespace RazorMailMessage
 
         public MailMessage Create<TModel>(string templateName, TModel model)
         {
-            return Create(templateName, model, null, null);
+            return Create(templateName, model, null);
         }
 
         public MailMessage Create<TModel>(string templateName, TModel model, IEnumerable<LinkedResource> linkedResources)
-        {
-            return Create(templateName, model, null, linkedResources);
-        }
-
-        public MailMessage Create<TModel>(string templateName, TModel model, CultureInfo cultureInfo)
-        {
-            return Create(templateName, model, cultureInfo, null);
-        }
-
-        public MailMessage Create<TModel>(string templateName, TModel model, CultureInfo cultureInfo, IEnumerable<LinkedResource> linkedResources)
         {
             if (string.IsNullOrWhiteSpace(templateName))
             {
                 throw new ArgumentNullException("templateName");
             }
 
-            // Default to invariant culture
-            cultureInfo = cultureInfo ?? CultureInfo.InvariantCulture;
             linkedResources = linkedResources ?? new List<LinkedResource>();
 
             // Get parsed templates
-            var htmlTemplate = ParseTemplate(templateName, model, false, cultureInfo);
-            var textTemplate = ParseTemplate(templateName, model, true, cultureInfo);
+            var htmlTemplate = ParseTemplate(templateName, model, false);
+            var textTemplate = ParseTemplate(templateName, model, true);
 
             var hasHtmlTemplate = !string.IsNullOrWhiteSpace(htmlTemplate);
             var hasTextTemplate = !string.IsNullOrWhiteSpace(textTemplate);
@@ -120,9 +107,9 @@ namespace RazorMailMessage
             return mailMessage;
         }
 
-        private string ParseTemplate<TModel>(string templateName, TModel model, bool plainText, CultureInfo cultureInfo)
+        private string ParseTemplate<TModel>(string templateName, TModel model, bool plainText)
         {
-            var templateCacheName = ResolveTemplateCacheName(templateName, plainText, cultureInfo);
+            var templateCacheName = ResolveTemplateCacheName(templateName, plainText);
 
             // Try to get template from cache
             var template = _templateCache.Get(templateCacheName);
@@ -130,7 +117,7 @@ namespace RazorMailMessage
             if (template == null)
             {
                 // Resolve template and add to cache
-                template = _templateResolver.ResolveTemplate(templateName, plainText, cultureInfo);
+                template = _templateResolver.ResolveTemplate(templateName, plainText);
 
                 // In case template is not resolved (could be the case with plain text templates), we cache an empty string.
                 _templateCache.Add(templateCacheName, template ?? "");
@@ -139,7 +126,7 @@ namespace RazorMailMessage
             return string.IsNullOrWhiteSpace(template) ? null : _templateService.Parse(template, model, null, templateCacheName);
         }
 
-        private static string ResolveTemplateCacheName(string templateName, bool plainText, CultureInfo cultureInfo)
+        private static string ResolveTemplateCacheName(string templateName, bool plainText)
         {
             // Resolve template cache name based on culture and whether or not it is the plain text version
             var templateCacheNameParts = new List<string> {templateName};
@@ -147,11 +134,6 @@ namespace RazorMailMessage
             if (plainText)
             {
                 templateCacheNameParts.Add("text");
-            }
-
-            if (!cultureInfo.Equals(CultureInfo.InvariantCulture))
-            {
-                templateCacheNameParts.Add(cultureInfo.Name);
             }
 
             var templateCacheName = string.Join(".", templateCacheNameParts);
