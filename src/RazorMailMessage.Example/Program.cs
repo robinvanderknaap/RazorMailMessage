@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Mail;
 using System.Reflection;
 using System.Text;
@@ -17,8 +16,8 @@ namespace RazorMailMessage.Example
         // http://smtp4dev.codeplex.com/
         
         private static readonly SmtpClient SmtpClient = new SmtpClient("localhost", 8025);
-        private static string _fromEmailAddress = "robin@skaele.nl";
-        private static string _toEmailAddress = "daan@skaele.nl";
+        private const string FromEmailAddress = "robin@skaele.nl";
+        private const string ToEmailAddress = "daan@skaele.nl";
 
 
         static void Main()
@@ -71,8 +70,8 @@ namespace RazorMailMessage.Example
 
             var mailMessage = razorMailMessageFactory.Create("RazorMailMessage.Example.Templates::MailTemplates.TestTemplate.cshtml", new { Name = "Robin" });
 
-            mailMessage.From = new MailAddress(_fromEmailAddress);
-            mailMessage.To.Add(new MailAddress(_toEmailAddress));
+            mailMessage.From = new MailAddress(FromEmailAddress);
+            mailMessage.To.Add(new MailAddress(ToEmailAddress));
             mailMessage.Subject = "This shouls be an English text";
 
             SmtpClient.Send(mailMessage);
@@ -89,8 +88,8 @@ namespace RazorMailMessage.Example
 
             var mailMessage = razorMailMessageFactory.Create("TestTemplate.cshtml", new { Name = "Robin" });
 
-            mailMessage.From = new MailAddress(_fromEmailAddress);
-            mailMessage.To.Add(new MailAddress(_toEmailAddress));
+            mailMessage.From = new MailAddress(FromEmailAddress);
+            mailMessage.To.Add(new MailAddress(ToEmailAddress));
             mailMessage.Subject = "This shouls be an English text";
 
             SmtpClient.Send(mailMessage);
@@ -112,8 +111,8 @@ namespace RazorMailMessage.Example
                 new List<LinkedResource> { new LinkedResource("chucknorris.jpg") { ContentId = "chuckNorrisImage" } }
             );
 
-            mailMessage.From = new MailAddress(_fromEmailAddress);
-            mailMessage.To.Add(new MailAddress(_toEmailAddress));
+            mailMessage.From = new MailAddress(FromEmailAddress);
+            mailMessage.To.Add(new MailAddress(ToEmailAddress));
             mailMessage.Subject = "This shouls be an English text";
 
             SmtpClient.Send(mailMessage);
