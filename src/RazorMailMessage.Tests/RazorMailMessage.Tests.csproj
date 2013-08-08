@@ -52,11 +52,15 @@
   <ItemGroup>
     <Compile Include="DefaultTemplateResolverTests.cs" />
     <Compile Include="InMemoryTemplateCacheTests.cs" />
+    <Compile Include="IntegrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RazorMailFactoryTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <EmbeddedResource Include="TestTemplates\TestTemplate.cshtml" />
+    <EmbeddedResource Include="TestTemplates\TestTemplate.text.cshtml" />
+    <EmbeddedResource Include="TestTemplates\TestLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RazorMailMessage\RazorMailMessage.csproj">

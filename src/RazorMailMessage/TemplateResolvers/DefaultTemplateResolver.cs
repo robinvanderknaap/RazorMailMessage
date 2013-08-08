@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using RazorMailMessage.Exceptions;
 
 namespace RazorMailMessage.TemplateResolvers
 {
@@ -91,6 +92,13 @@ namespace RazorMailMessage.TemplateResolvers
 
         public string ResolveLayout(string layoutName)
         {
+            var layout = ResolveTemplate(layoutName, false);
+
+            if (string.IsNullOrWhiteSpace(layout))
+            {
+                throw new TemplateNotFoundException(layoutName);
+            }
+            
             return ResolveTemplate(layoutName, false);
         }
     }
