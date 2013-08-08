@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Mail;
 using System.Net.Mime;
+using System.Reflection;
 using System.Text;
 using RazorEngine.Configuration;
 using RazorEngine.Templating;
@@ -19,7 +20,7 @@ namespace RazorMailMessage
         private readonly ITemplateCache _templateCache;
         private readonly ITemplateService _templateService;
 
-        public RazorMailMessageFactory() : this(new DefaultTemplateResolver(), new InMemoryTemplateCache(), typeof(DefaultTemplateBase<>)) { }
+        public RazorMailMessageFactory() : this(new DefaultTemplateResolver(Assembly.GetCallingAssembly(), string.Empty), new InMemoryTemplateCache(), typeof(DefaultTemplateBase<>)) { }
 
         public RazorMailMessageFactory(ITemplateResolver templateResolver, ITemplateCache templateCache, Type templateBase)
         {
@@ -42,20 +43,22 @@ namespace RazorMailMessage
             var templateServiceConfiguration = new TemplateServiceConfiguration
             {
                 // Layout resolver for razor engine
-                // Once resolved, the layout will be cached, so the resolver is called only once
+                // Once resolved, the layout will be cached, so the resolver is called only once during the lifetime of this factory
                 Resolver = new DelegateTemplateResolver(_templateResolver.ResolveLayout),
+                
+                // Set view base class
                 BaseTemplateType = templateBase
             };
 
             _templateService = new TemplateService(templateServiceConfiguration);
         }
 
-        public MailMessage Create<TModel>(string templateName, TModel model)
+        public virtual MailMessage Create<TModel>(string templateName, TModel model)
         {
             return Create(templateName, model, null);
         }
 
-        public MailMessage Create<TModel>(string templateName, TModel model, IEnumerable<LinkedResource> linkedResources)
+        public virtual MailMessage Create<TModel>(string templateName, TModel model, IEnumerable<LinkedResource> linkedResources)
         {
             if (string.IsNullOrWhiteSpace(templateName))
             {

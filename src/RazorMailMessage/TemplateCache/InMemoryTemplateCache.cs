@@ -6,13 +6,13 @@ namespace RazorMailMessage.TemplateCache
     {
         private readonly MemoryCache _cache = MemoryCache.Default;
 
-        public string Get(string templateCacheName)
+        public virtual string Get(string templateCacheName)
         {
             var cacheItem = _cache.Get(templateCacheName);
             return cacheItem == null ? null : cacheItem.ToString();
         }
 
-        public void Add(string templateCacheName, string template)
+        public virtual void Add(string templateCacheName, string template)
         {
             _cache.Add(templateCacheName, template, new CacheItemPolicy());
         }

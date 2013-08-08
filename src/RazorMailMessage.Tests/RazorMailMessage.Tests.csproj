@@ -55,18 +55,25 @@
     <Compile Include="IntegrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RazorMailFactoryTests.cs" />
+    <Compile Include="Utils\StringUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <EmbeddedResource Include="TestTemplates\TestTemplate.cshtml" />
     <EmbeddedResource Include="TestTemplates\TestTemplate.text.cshtml" />
     <EmbeddedResource Include="TestTemplates\TestLayout.cshtml" />
+    <EmbeddedResource Include="TestTemplates\IntegrationTest\TestLayout.cshtml" />
+    <EmbeddedResource Include="TestTemplates\IntegrationTest\TestTemplate.cshtml" />
+    <EmbeddedResource Include="TestTemplates\IntegrationTest\TestTemplate.text.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RazorMailMessage\RazorMailMessage.csproj">
       <Project>{7EE1FCB6-D017-4DDA-B650-ED2D0A888337}</Project>
       <Name>RazorMailMessage</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="TestTemplates\IntegrationTest\chuck_mailheader.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

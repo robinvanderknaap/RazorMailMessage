@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace RazorMailMessage.TemplateResolvers
+﻿namespace RazorMailMessage.TemplateResolvers
 {
     public interface ITemplateResolver
     {

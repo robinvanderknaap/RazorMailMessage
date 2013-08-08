@@ -30,6 +30,7 @@ namespace RazorMailMessage.Example
                 menu.AppendLine("(1) Send mail message with default settings");
                 menu.AppendLine("(2) Send mail message with specific assembly and namespace");
                 menu.AppendLine("(3) Send mail message with embedded image");
+                menu.AppendLine("(4) Send mail message with layout and sections");
                 menu.AppendLine("(x) Exit");
 
                 // Display menu and wait for user input
@@ -39,8 +40,6 @@ namespace RazorMailMessage.Example
                 ExecuteOption(option);
                 Console.WriteLine();
             } while (option.ToLower() != "x");
-
-            
         }
 
         private static void ExecuteOption(string option)
@@ -56,6 +55,9 @@ namespace RazorMailMessage.Example
                 case "3":
                     SendMailMessageWithEmbeddedImage();
                     break;
+                case "4":
+                    SendMailMessageWithLayoutAndSections();
+                    break;
                 case "x":
                     break;
                 default:
@@ -66,18 +68,13 @@ namespace RazorMailMessage.Example
 
         private static void SendMailMessageWithDefaultSettings()
         {
-            var razorMailMessageFactory = new RazorMailMessageFactory
-            (
-                new DefaultTemplateResolver(Assembly.Load("RazorMailMessage.Example.Templates"), "MailTemplates"),
-                new InMemoryTemplateCache(),
-                typeof(DefaultTemplateBase<>)
-            );
+            var razorMailMessageFactory = new RazorMailMessageFactory();
 
-            var mailMessage = razorMailMessageFactory.Create("TestTemplate.resources", new { Name = "Robin" });
+            var mailMessage = razorMailMessageFactory.Create("MailTemplates.SendMailMessageWithDefaultSettings.TestTemplate.cshtml", new { Name = "Robin" });
 
             mailMessage.From = new MailAddress(FromEmailAddress);
             mailMessage.To.Add(new MailAddress(ToEmailAddress));
-            mailMessage.Subject = "This shouls be an English text";
+            mailMessage.Subject = "Test template";
 
             SmtpClient.Send(mailMessage);
         }
@@ -86,39 +83,63 @@ namespace RazorMailMessage.Example
         {
             var razorMailMessageFactory = new RazorMailMessageFactory
             (
-                new DefaultTemplateResolver(Assembly.Load("RazorMailMessage.Example.Templates"), "MailTemplates"),
+                new DefaultTemplateResolver(Assembly.GetExecutingAssembly(), "MailTemplates"),
                 new InMemoryTemplateCache(),
                 typeof(DefaultTemplateBase<>)
             );
 
-            var mailMessage = razorMailMessageFactory.Create("TestTemplate.cshtml", new { Name = "Robin" });
+            var mailMessage = razorMailMessageFactory.Create("SendMailMessageWithSpecificAssemblyAndNameSpace.TestTemplate.cshtml", new { Name = "Robin" });
 
             mailMessage.From = new MailAddress(FromEmailAddress);
             mailMessage.To.Add(new MailAddress(ToEmailAddress));
-            mailMessage.Subject = "This shouls be an English text";
+            mailMessage.Subject = "Test template";
 
             SmtpClient.Send(mailMessage);
         }
 
-        private static void SendMailMessageWithEmbeddedImage()
+        private static void SendMailMessageWithLayoutAndSections()
         {
+            // Use namespace: MailTemplates.SendMailMessageWithEmbeddedImage
             var razorMailMessageFactory = new RazorMailMessageFactory
             (
-                new DefaultTemplateResolver(Assembly.Load("RazorMailMessage.Example.Templates"), "MailTemplates"),
+                new DefaultTemplateResolver("MailTemplates"),
                 new InMemoryTemplateCache(),
                 typeof(DefaultTemplateBase<>)
             );
 
             var mailMessage = razorMailMessageFactory.Create
             (
-                "SendEmailWithEmbeddedImage.TestTemplate.cshtml", 
-                new { Name = "Robin" },
-                new List<LinkedResource> { new LinkedResource("chucknorris.jpg") { ContentId = "chuckNorrisImage" } }
+                "SendMailMessageWithLayoutAndSections.TestTemplate.cshtml",
+                new { Name = "Robin" }
             );
 
             mailMessage.From = new MailAddress(FromEmailAddress);
             mailMessage.To.Add(new MailAddress(ToEmailAddress));
-            mailMessage.Subject = "This shouls be an English text";
+            mailMessage.Subject = "Test template";
+
+            SmtpClient.Send(mailMessage);
+        }
+
+        private static void SendMailMessageWithEmbeddedImage()
+        {
+            // Use namespace: MailTemplates.SendMailMessageWithEmbeddedImage
+            var razorMailMessageFactory = new RazorMailMessageFactory
+            (
+                new DefaultTemplateResolver("MailTemplates"),
+                new InMemoryTemplateCache(),
+                typeof(DefaultTemplateBase<>)
+            );
+
+            var mailMessage = razorMailMessageFactory.Create
+            (
+                "SendMailMessageWithEmbeddedImage.TestTemplate.cshtml", 
+                new { Name = "Robin" },
+                new List<LinkedResource> { new LinkedResource("MailTemplates/SendMailMessageWithEmbeddedImage/chuck_mailheader.png") { ContentId = "chuckNorrisImage" } }
+            );
+
+            mailMessage.From = new MailAddress(FromEmailAddress);
+            mailMessage.To.Add(new MailAddress(ToEmailAddress));
+            mailMessage.Subject = "Test template";
 
             SmtpClient.Send(mailMessage);
         }

@@ -49,7 +49,7 @@ namespace RazorMailMessage.TemplateResolvers
             _nameSpace = (nameSpace ?? string.Empty).Trim();
         }
 
-        public string ResolveTemplate(string templateName, bool isPlainText)
+        public virtual string ResolveTemplate(string templateName, bool isPlainText)
         {
             if (string.IsNullOrWhiteSpace(templateName))
             {
@@ -58,7 +58,7 @@ namespace RazorMailMessage.TemplateResolvers
 
             var templateNameParts = templateName.Split('.').ToList();
 
-            // Add assembly to templatename
+            // Add assembly
             templateNameParts.Insert(0, _assemblyName);
             
             // Addname namespace
@@ -90,7 +90,7 @@ namespace RazorMailMessage.TemplateResolvers
             }
         }
 
-        public string ResolveLayout(string layoutName)
+        public virtual string ResolveLayout(string layoutName)
         {
             var layout = ResolveTemplate(layoutName, false);
 
@@ -98,8 +98,8 @@ namespace RazorMailMessage.TemplateResolvers
             {
                 throw new TemplateNotFoundException(layoutName);
             }
-            
-            return ResolveTemplate(layoutName, false);
+
+            return layout;
         }
     }
 }

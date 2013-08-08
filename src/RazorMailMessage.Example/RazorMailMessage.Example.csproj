@@ -50,19 +50,23 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <EmbeddedResource Include="MailTemplates\SendMailMessageWithEmbeddedImage\MailLayout.cshtml" />
+    <EmbeddedResource Include="MailTemplates\SendMailMessageWithEmbeddedImage\TestTemplate.cshtml" />
+    <EmbeddedResource Include="MailTemplates\SendMailMessageWithEmbeddedImage\TestTemplate.text.cshtml" />
+    <EmbeddedResource Include="MailTemplates\SendMailMessageWithDefaultSettings\TestTemplate.cshtml" />
+    <EmbeddedResource Include="MailTemplates\SendMailMessageWithSpecificAssemblyAndNameSpace\TestTemplate.cshtml" />
+    <EmbeddedResource Include="MailTemplates\SendMailMessageWithLayoutAndSections\MailLayout.cshtml" />
+    <EmbeddedResource Include="MailTemplates\SendMailMessageWithLayoutAndSections\TestTemplate.cshtml" />
+    <EmbeddedResource Include="MailTemplates\SendMailMessageWithLayoutAndSections\TestTemplate.text.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RazorMailMessage.Example.Templates\RazorMailMessage.Example.Templates.csproj">
-      <Project>{96dac1d6-1730-4ab0-8f67-249614a4bcbf}</Project>
-      <Name>RazorMailMessage.Example.Templates</Name>
-    </ProjectReference>
     <ProjectReference Include="..\RazorMailMessage\RazorMailMessage.csproj">
       <Project>{7ee1fcb6-d017-4dda-b650-ed2d0a888337}</Project>
       <Name>RazorMailMessage</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="chucknorris.jpg">
+    <Content Include="MailTemplates\SendMailMessageWithEmbeddedImage\chuck_mailheader.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

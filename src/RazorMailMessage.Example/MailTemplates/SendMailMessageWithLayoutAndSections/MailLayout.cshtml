@@ -5,10 +5,13 @@
 			    <td>
 				    <table width="600" align="center">
 				        <tr>
-				            <td><img src="cid:chuckNorrisImage" alt=""/></td>
+				            <td><h1>@RenderSection("Header")</h1></td>
 				        </tr>
 				        <tr>
-				            <td align="left">@RenderBody()</td>
+				            <td style="padding-top: 20px;" align="left">@RenderBody()</td>
+				        </tr>
+                        <tr>
+				            <td><h1>@RenderSection("Footer")</h1></td>
 				        </tr>
 				    </table>
 			    </td>
