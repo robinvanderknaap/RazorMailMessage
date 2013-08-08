@@ -173,14 +173,10 @@ namespace RazorMailMessage.Tests
 
             templateCacheMock.Setup(x => x.Get("TestTemplate")).Returns(htmlTemplate);
             templateCacheMock.Setup(x => x.Get("TestTemplate.text")).Returns(textTemplate);
+            templateCacheMock.Setup(x => x.Get("TestLayout")).Returns(layoutTemplate);
 
             var templateResolverMock = new Mock<ITemplateResolver>();
-
-            // Request for layout, caching of layouts is done by razor engine.
-            templateResolverMock
-                .Setup(x => x.ResolveLayout("TestLayout"))
-                .Returns(layoutTemplate);
-
+            
             var razorMailMessageFactory = new RazorMailMessageFactory(templateResolverMock.Object, templateCacheMock.Object, typeof(DefaultTemplateBase<>));
             var model = new { Name = "Robin" };
 
@@ -195,9 +191,7 @@ namespace RazorMailMessage.Tests
 
             templateResolverMock.Verify(x => x.ResolveTemplate("TestTemplate", false), Times.Never());
             templateResolverMock.Verify(x => x.ResolveTemplate("TestTemplate", true), Times.Never());
-
-            // Layout is used twice, once for html, once for text. Layout should be resolved once though, because of the caching of the razor engine itself.
-            templateResolverMock.Verify(x => x.ResolveLayout("TestLayout"), Times.Once());
+            templateResolverMock.Verify(x => x.ResolveLayout("TestLayout"), Times.Never());
         }
 
         [Test]

@@ -43,8 +43,20 @@ namespace RazorMailMessage
             var templateServiceConfiguration = new TemplateServiceConfiguration
             {
                 // Layout resolver for razor engine
-                // Once resolved, the layout will be cached, so the resolver is called only once during the lifetime of this factory
-                Resolver = new DelegateTemplateResolver(_templateResolver.ResolveLayout),
+                // Once resolved, the layout will be cached by the razor engine, so the resolver is called only once during the lifetime of this factory
+                // However, we want the ability to cache the layout even when the factory is instatiated multiple times
+                Resolver = new DelegateTemplateResolver(layoutName =>
+                    {
+                        var layout = _templateCache.Get(layoutName);
+
+                        if (layout == null)
+                        {
+                            layout = _templateResolver.ResolveLayout(layoutName);
+                            _templateCache.Add(layoutName, layout);
+                        }
+
+                        return layout;
+                    }),
                 
                 // Set view base class
                 BaseTemplateType = templateBase
