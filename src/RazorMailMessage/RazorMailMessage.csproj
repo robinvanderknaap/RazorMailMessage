@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Activators\Activator.cs" />
     <Compile Include="Exceptions\TemplateNotFoundException.cs" />
     <Compile Include="TemplateBase\DefaultTemplateBase.cs" />
     <Compile Include="TemplateCache\InMemoryTemplateCache.cs" />

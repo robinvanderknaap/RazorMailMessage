@@ -10,6 +10,8 @@ namespace RazorMailMessage.Tests
         [Test]
         public void CanCreateEmailMessageWithRazorTemplate()
         {
+            Cache.Clear();
+            
             var razorMailMessageFactory = new RazorMailMessageFactory();
 
             var mailMessage = razorMailMessageFactory.Create
@@ -37,6 +39,8 @@ namespace RazorMailMessage.Tests
             Assert.AreEqual(1, mailMessage.AlternateViews.Count);
             Assert.AreEqual(expectedResult.StripWhiteSpace(), new StreamReader(mailMessage.AlternateViews[0].ContentStream).ReadToEnd().StripWhiteSpace());
             Assert.AreEqual(expectedPlainTextResult.StripWhiteSpace(), mailMessage.Body.StripWhiteSpace());
+
+            Cache.Clear();
         }
 
         

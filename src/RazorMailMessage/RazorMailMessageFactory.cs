@@ -20,9 +20,15 @@ namespace RazorMailMessage
         private readonly ITemplateCache _templateCache;
         private readonly ITemplateService _templateService;
 
-        public RazorMailMessageFactory() : this(new DefaultTemplateResolver(Assembly.GetCallingAssembly(), string.Empty), new InMemoryTemplateCache(), typeof(DefaultTemplateBase<>)) { }
+        public RazorMailMessageFactory() : this(new DefaultTemplateResolver(Assembly.GetCallingAssembly(), string.Empty), typeof(DefaultTemplateBase<>), null, new InMemoryTemplateCache()) { }
 
-        public RazorMailMessageFactory(ITemplateResolver templateResolver, ITemplateCache templateCache, Type templateBase)
+        public RazorMailMessageFactory(ITemplateResolver templateResolver) : this(templateResolver, typeof(DefaultTemplateBase<>), null, new InMemoryTemplateCache()) { }
+
+        public RazorMailMessageFactory(ITemplateResolver templateResolver, Type templateBase) : this(templateResolver, templateBase, null, new InMemoryTemplateCache()) { }
+
+        public RazorMailMessageFactory(ITemplateResolver templateResolver, Type templateBase, Func<Type, object> dependencyResolver) : this(templateResolver, templateBase, dependencyResolver, new InMemoryTemplateCache()) { }
+       
+        public RazorMailMessageFactory(ITemplateResolver templateResolver, Type templateBase, Func<Type, object> dependencyResolver, ITemplateCache templateCache)
         {
             if (templateResolver == null)
             {
@@ -54,7 +60,6 @@ namespace RazorMailMessage
                             layout = _templateResolver.ResolveLayout(layoutName);
                             _templateCache.Add(layoutName, layout);
                         }
-
                         return layout;
                     }),
                 
@@ -62,6 +67,11 @@ namespace RazorMailMessage
                 BaseTemplateType = templateBase
             };
 
+            if (dependencyResolver != null)
+            {
+                templateServiceConfiguration.Activator = new Activators.Activator(dependencyResolver);
+            }
+            
             _templateService = new TemplateService(templateServiceConfiguration);
         }
 

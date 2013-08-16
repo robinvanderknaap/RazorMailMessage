@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Net.Mail;
 using System.Reflection;
 using System.Text;
-using RazorMailMessage.TemplateBase;
-using RazorMailMessage.TemplateCache;
 using RazorMailMessage.TemplateResolvers;
 
 namespace RazorMailMessage.Example
@@ -83,9 +81,7 @@ namespace RazorMailMessage.Example
         {
             var razorMailMessageFactory = new RazorMailMessageFactory
             (
-                new DefaultTemplateResolver(Assembly.GetExecutingAssembly(), "MailTemplates"),
-                new InMemoryTemplateCache(),
-                typeof(DefaultTemplateBase<>)
+                new DefaultTemplateResolver(Assembly.GetExecutingAssembly(), "MailTemplates")
             );
 
             var mailMessage = razorMailMessageFactory.Create("SendMailMessageWithSpecificAssemblyAndNameSpace.TestTemplate.cshtml", new { Name = "Robin" });
@@ -102,9 +98,7 @@ namespace RazorMailMessage.Example
             // Use namespace: MailTemplates.SendMailMessageWithEmbeddedImage
             var razorMailMessageFactory = new RazorMailMessageFactory
             (
-                new DefaultTemplateResolver("MailTemplates"),
-                new InMemoryTemplateCache(),
-                typeof(DefaultTemplateBase<>)
+                new DefaultTemplateResolver("MailTemplates")
             );
 
             var mailMessage = razorMailMessageFactory.Create
@@ -125,9 +119,7 @@ namespace RazorMailMessage.Example
             // Use namespace: MailTemplates.SendMailMessageWithEmbeddedImage
             var razorMailMessageFactory = new RazorMailMessageFactory
             (
-                new DefaultTemplateResolver("MailTemplates"),
-                new InMemoryTemplateCache(),
-                typeof(DefaultTemplateBase<>)
+                new DefaultTemplateResolver("MailTemplates")
             );
 
             var mailMessage = razorMailMessageFactory.Create

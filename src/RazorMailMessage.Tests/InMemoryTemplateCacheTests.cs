@@ -1,7 +1,6 @@
-﻿using System.Linq;
-using System.Runtime.Caching;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using RazorMailMessage.TemplateCache;
+using RazorMailMessage.Tests.Utils;
 
 namespace RazorMailMessage.Tests
 {
@@ -11,7 +10,7 @@ namespace RazorMailMessage.Tests
         [Test]
         public void CanCacheTemplate()
         {
-            ClearCache();
+            Cache.Clear();
             
             var cache = new InMemoryTemplateCache();
 
@@ -20,16 +19,10 @@ namespace RazorMailMessage.Tests
             cache.Add("TestTemplate", "<b>Hello @Model.Name</b>");
 
             Assert.AreEqual("<b>Hello @Model.Name</b>", cache.Get("TestTemplate"));
+
+            Cache.Clear();
         }
 
-        private static void ClearCache()
-        {
-            var cacheKeys = MemoryCache.Default.Select(cacheItem => cacheItem.Key).ToList();
-            
-            foreach (var cacheKey in cacheKeys)
-            {
-                MemoryCache.Default.Remove(cacheKey);
-            }
-        }
+        
     }
 }

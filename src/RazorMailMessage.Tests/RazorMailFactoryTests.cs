@@ -30,7 +30,7 @@ namespace RazorMailMessage.Tests
                 .Setup(x => x.ResolveTemplate(It.IsAny<string>(), true))
                 .Returns("");
 
-            var razorMailMessageFactory = new RazorMailMessageFactory(templateResolverMock.Object, new Mock<ITemplateCache>().Object, typeof(DefaultTemplateBase<>));
+            var razorMailMessageFactory = new RazorMailMessageFactory(templateResolverMock.Object, typeof(DefaultTemplateBase<>), null, new Mock<InMemoryTemplateCache>().Object);
             var model = new { Name = "Robin" };
 
             var mailMessage = razorMailMessageFactory.Create("TestTemplate", model);
@@ -55,7 +55,7 @@ namespace RazorMailMessage.Tests
                     .Setup(x => x.ResolveTemplate(It.IsAny<string>(), true))
                     .Returns("Welcome @Model.Name");
 
-            var razorMailMessageFactory = new RazorMailMessageFactory(templateResolverMock.Object, new Mock<ITemplateCache>().Object, typeof(DefaultTemplateBase<>));
+            var razorMailMessageFactory = new RazorMailMessageFactory(templateResolverMock.Object, typeof(DefaultTemplateBase<>), null, new Mock<InMemoryTemplateCache>().Object);
             var model = new { Name = "Robin" };
 
             var mailMessage = razorMailMessageFactory.Create("TestTemplate", model);
@@ -88,7 +88,7 @@ namespace RazorMailMessage.Tests
                 .Setup(x => x.ResolveTemplate("TestTemplate", true))
                 .Returns("");
 
-            var razorMailMessageFactory = new RazorMailMessageFactory(templateResolverMock.Object, new Mock<ITemplateCache>().Object, typeof(DefaultTemplateBase<>));
+            var razorMailMessageFactory = new RazorMailMessageFactory(templateResolverMock.Object, typeof(DefaultTemplateBase<>), null, new Mock<InMemoryTemplateCache>().Object);
             var model = new { Name = "Robin" };
 
             var mailMessage = razorMailMessageFactory.Create("TestTemplate", model);
@@ -118,7 +118,7 @@ namespace RazorMailMessage.Tests
                 .Setup(x => x.ResolveTemplate("TestTemplate", true))
                 .Returns("@{ Layout = \"TestLayout\";}Welcome @Model.Name");
 
-            var razorMailMessageFactory = new RazorMailMessageFactory(templateResolverMock.Object, new Mock<ITemplateCache>().Object, typeof(DefaultTemplateBase<>));
+            var razorMailMessageFactory = new RazorMailMessageFactory(templateResolverMock.Object, typeof(DefaultTemplateBase<>), null, new Mock<InMemoryTemplateCache>().Object);
             var model = new { Name = "Robin" };
 
             var mailMessage = razorMailMessageFactory.Create("TestTemplate", model);
@@ -146,7 +146,7 @@ namespace RazorMailMessage.Tests
                 .Setup(x => x.ResolveTemplate(It.IsAny<string>(), true))
                 .Returns("");
 
-            var razorMailMessageFactory = new RazorMailMessageFactory(templateResolverMock.Object, new Mock<ITemplateCache>().Object, typeof(DefaultTemplateBase<>));
+            var razorMailMessageFactory = new RazorMailMessageFactory(templateResolverMock.Object, typeof(DefaultTemplateBase<>), null, new Mock<InMemoryTemplateCache>().Object);
             var model = new { Name = "Robin" };
 
             var linkedResources = new List<LinkedResource>
@@ -177,7 +177,7 @@ namespace RazorMailMessage.Tests
 
             var templateResolverMock = new Mock<ITemplateResolver>();
             
-            var razorMailMessageFactory = new RazorMailMessageFactory(templateResolverMock.Object, templateCacheMock.Object, typeof(DefaultTemplateBase<>));
+            var razorMailMessageFactory = new RazorMailMessageFactory(templateResolverMock.Object, typeof(DefaultTemplateBase<>), null, templateCacheMock.Object);
             var model = new { Name = "Robin" };
 
             var mailMessage = razorMailMessageFactory.Create("TestTemplate", model);
@@ -198,35 +198,37 @@ namespace RazorMailMessage.Tests
         [ExpectedException(ExpectedException = typeof(TemplateNotFoundException))]
         public void TemplateNotFoundExceptionIsThrownWhenTextAndHtmlTemplateAreMissing()
         {
-            new RazorMailMessageFactory(new Mock<ITemplateResolver>().Object, new Mock<ITemplateCache>().Object, typeof(DefaultTemplateBase<>)).Create("test.cshtml", new { Name = "Robin" });
+            new RazorMailMessageFactory(new Mock<ITemplateResolver>().Object, typeof(DefaultTemplateBase<>), null, new Mock<InMemoryTemplateCache>().Object)
+                .Create("test.cshtml", new { Name = "Robin" });
         }
 
         [Test]
         [ExpectedException(ExpectedException = typeof(ArgumentNullException))]
         public void TemplateNameCannotBeEmpty()
         {
-            new RazorMailMessageFactory(new Mock<ITemplateResolver>().Object, new Mock<ITemplateCache>().Object, typeof(DefaultTemplateBase<>)).Create(" ", new { Name = "Robin" });
+            new RazorMailMessageFactory(new Mock<ITemplateResolver>().Object, typeof(DefaultTemplateBase<>), null, new Mock<InMemoryTemplateCache>().Object)
+                .Create(" ", new { Name = "Robin" });
         }
 
         [Test]
         [ExpectedException(ExpectedException = typeof(ArgumentNullException))]
         public void TemplateResolverCannotBeNull()
         {
-            new RazorMailMessageFactory(null, new Mock<ITemplateCache>().Object, typeof(DefaultTemplateBase<>));
+            new RazorMailMessageFactory(null);
         }
 
         [Test]
         [ExpectedException(ExpectedException = typeof(ArgumentNullException))]
         public void TemplateCacheCannotBeNull()
         {
-            new RazorMailMessageFactory(new Mock<ITemplateResolver>().Object, null, typeof(DefaultTemplateBase<>));
+            new RazorMailMessageFactory(new Mock<ITemplateResolver>().Object, typeof(DefaultTemplateBase<>), null, null);
         }
 
         [Test]
         [ExpectedException(ExpectedException = typeof(ArgumentNullException))]
         public void TemplateBaseTypeCannotBeNull()
         {
-            new RazorMailMessageFactory(new Mock<ITemplateResolver>().Object, new Mock<ITemplateCache>().Object, null);
+            new RazorMailMessageFactory(new Mock<ITemplateResolver>().Object, null, null, new Mock<InMemoryTemplateCache>().Object);
         }
     }
 }

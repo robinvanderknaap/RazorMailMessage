@@ -28,7 +28,7 @@ namespace RazorMailMessage.Tests
                 .Setup(x => x.ResolveTemplate(It.IsAny<string>(), true))
                 .Returns("");
 
-            var razorMailMessageFactory = new RazorMailMessageFactory(templateResolverMock.Object, new Mock<ITemplateCache>().Object, typeof(CustomTemplateBase<>));
+            var razorMailMessageFactory = new RazorMailMessageFactory(templateResolverMock.Object, typeof(CustomTemplateBase<>), null, new Mock<InMemoryTemplateCache>().Object);
 
             var mailMessage = razorMailMessageFactory.Create("TestTemplate", new {});
 
