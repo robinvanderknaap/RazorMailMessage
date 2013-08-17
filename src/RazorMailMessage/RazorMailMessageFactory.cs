@@ -77,10 +77,20 @@ namespace RazorMailMessage
 
         public virtual MailMessage Create<TModel>(string templateName, TModel model)
         {
-            return Create(templateName, model, null);
+            return Create(templateName, model, null, null);
+        }
+
+        public virtual MailMessage Create<TModel>(string templateName, TModel model, DynamicViewBag viewBag)
+        {
+            return Create(templateName, model, viewBag, null);
         }
 
         public virtual MailMessage Create<TModel>(string templateName, TModel model, IEnumerable<LinkedResource> linkedResources)
+        {
+            return Create(templateName, model, null, linkedResources);
+        }
+
+        public virtual MailMessage Create<TModel>(string templateName, TModel model, DynamicViewBag viewBag, IEnumerable<LinkedResource> linkedResources)
         {
             if (string.IsNullOrWhiteSpace(templateName))
             {
@@ -90,8 +100,8 @@ namespace RazorMailMessage
             linkedResources = linkedResources ?? new List<LinkedResource>();
 
             // Get parsed templates
-            var htmlTemplate = ParseTemplate(templateName, model, false);
-            var textTemplate = ParseTemplate(templateName, model, true);
+            var htmlTemplate = ParseTemplate(templateName, model, false, viewBag);
+            var textTemplate = ParseTemplate(templateName, model, true, viewBag);
 
             var hasHtmlTemplate = !string.IsNullOrWhiteSpace(htmlTemplate);
             var hasTextTemplate = !string.IsNullOrWhiteSpace(textTemplate);
@@ -132,7 +142,7 @@ namespace RazorMailMessage
             return mailMessage;
         }
 
-        private string ParseTemplate<TModel>(string templateName, TModel model, bool plainText)
+        private string ParseTemplate<TModel>(string templateName, TModel model, bool plainText, DynamicViewBag viewBag)
         {
             var templateCacheName = ResolveTemplateCacheName(templateName, plainText);
 
@@ -148,7 +158,7 @@ namespace RazorMailMessage
                 _templateCache.Add(templateCacheName, template ?? "");
             }
 
-            return string.IsNullOrWhiteSpace(template) ? null : _templateService.Parse(template, model, null, templateCacheName);
+            return string.IsNullOrWhiteSpace(template) ? null : _templateService.Parse(template, model, viewBag, templateCacheName);
         }
 
         private static string ResolveTemplateCacheName(string templateName, bool plainText)

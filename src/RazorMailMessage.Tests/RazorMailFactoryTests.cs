@@ -5,10 +5,11 @@ using System.Net.Mail;
 using System.Text;
 using Moq;
 using NUnit.Framework;
+using RazorEngine.Templating;
 using RazorMailMessage.Exceptions;
 using RazorMailMessage.TemplateBase;
 using RazorMailMessage.TemplateCache;
-using RazorMailMessage.TemplateResolvers;
+using ITemplateResolver = RazorMailMessage.TemplateResolvers.ITemplateResolver;
 
 namespace RazorMailMessage.Tests
 {
@@ -129,6 +130,34 @@ namespace RazorMailMessage.Tests
             Assert.AreEqual(1, mailMessage.AlternateViews.Count);
             Assert.AreEqual(expectedResult, new StreamReader(mailMessage.AlternateViews[0].ContentStream).ReadToEnd());
             Assert.AreEqual(expectedPlainTextResult, mailMessage.Body);
+        }
+
+        [Test]
+        public void CanAddViewBag()
+        {
+            var templateResolverMock = new Mock<ITemplateResolver>();
+
+            // Request for html template
+            templateResolverMock
+                .Setup(x => x.ResolveTemplate(It.IsAny<string>(), false))
+                .Returns("<b>Welcome @ViewBag.Name</b>");
+
+            // Request for plain text template returns empty string (indicating the plain text template should no be used)
+            templateResolverMock
+                .Setup(x => x.ResolveTemplate(It.IsAny<string>(), true))
+                .Returns("");
+
+            var razorMailMessageFactory = new RazorMailMessageFactory(templateResolverMock.Object, typeof(DefaultTemplateBase<>), null, new Mock<InMemoryTemplateCache>().Object);
+            var model = new { };
+
+            dynamic viewBag = new DynamicViewBag();
+            viewBag.Name = "Robin";
+
+            var mailMessage = razorMailMessageFactory.Create("TestTemplate", model, viewBag);
+
+            const string expectedResult = "<b>Welcome Robin</b>";
+            Assert.AreEqual(expectedResult, mailMessage.Body);
+            Assert.AreEqual(expectedResult, new StreamReader(mailMessage.AlternateViews[0].ContentStream).ReadToEnd());
         }
 
         [Test]
