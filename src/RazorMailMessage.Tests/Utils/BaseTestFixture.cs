@@ -1,11 +1,25 @@
 ﻿using System.Linq;
 using System.Runtime.Caching;
+using NUnit.Framework;
 
 namespace RazorMailMessage.Tests.Utils
 {
-    public static class Cache
+    [TestFixture]
+    public class BaseTestFixture
     {
-        public static void Clear()
+        [SetUp]
+        public void SetUp()
+        {
+            ClearCache();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            ClearCache();
+        }
+
+        private static void ClearCache()
         {
             var cacheKeys = MemoryCache.Default.Select(cacheItem => cacheItem.Key).ToList();
 
@@ -15,4 +29,6 @@ namespace RazorMailMessage.Tests.Utils
             }
         }
     }
+
+
 }

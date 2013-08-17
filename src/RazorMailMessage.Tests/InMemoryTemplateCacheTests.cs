@@ -4,14 +4,11 @@ using RazorMailMessage.Tests.Utils;
 
 namespace RazorMailMessage.Tests
 {
-    [TestFixture]
-    public class InMemoryTemplateCacheTests
+    public class InMemoryTemplateCacheTests : BaseTestFixture
     {
         [Test]
         public void CanCacheTemplate()
         {
-            Cache.Clear();
-            
             var cache = new InMemoryTemplateCache();
 
             Assert.IsNull(cache.Get("TestTemplate"));
@@ -19,10 +16,6 @@ namespace RazorMailMessage.Tests
             cache.Add("TestTemplate", "<b>Hello @Model.Name</b>");
 
             Assert.AreEqual("<b>Hello @Model.Name</b>", cache.Get("TestTemplate"));
-
-            Cache.Clear();
         }
-
-        
     }
 }
