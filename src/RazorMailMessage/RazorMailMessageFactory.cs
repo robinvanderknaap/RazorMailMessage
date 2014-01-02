@@ -14,7 +14,7 @@ using ITemplateResolver = RazorMailMessage.TemplateResolvers.ITemplateResolver;
 
 namespace RazorMailMessage
 {
-    public class RazorMailMessageFactory : IRazorMailMessageFactory
+    public class RazorMailMessageFactory : IRazorMailMessageFactory, IDisposable
     {
         private readonly ITemplateResolver _templateResolver;
         private readonly ITemplateCache _templateCache;
@@ -173,6 +173,14 @@ namespace RazorMailMessage
 
             var templateCacheName = string.Join(".", templateCacheNameParts);
             return templateCacheName;
+        }
+
+        public void Dispose()
+        {
+            if (_templateService != null)
+            {
+                _templateService.Dispose();
+            }
         }
     }
 }
