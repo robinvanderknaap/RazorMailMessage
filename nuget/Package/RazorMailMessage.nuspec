@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>RazorMailMessage</id>
-    <version>0.1</version>
+    <version>0.2</version>
     <authors>Robin van der Knaap</authors>
     <owners>Robin van der Knaap</owners>
     <licenseUrl>https://github.com/robinvanderknaap/RazorMailMessage</licenseUrl>
