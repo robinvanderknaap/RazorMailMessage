@@ -3,7 +3,7 @@ using System.Net.Mail;
 using RazorEngine.Templating;
 
 namespace RazorMailMessage
-{
+{//adasd
     public interface IRazorMailMessageFactory
     {
         MailMessage Create<TModel>(string templateName, TModel model);
