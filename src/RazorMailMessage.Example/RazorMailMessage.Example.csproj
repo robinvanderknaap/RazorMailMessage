@@ -1,81 +1,12 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{53907F76-D57F-4B91-9D1D-DA7D11D4F4A1}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RazorMailMessage.Example</RootNamespace>
+    <TargetFramework>net462</TargetFramework>
     <AssemblyName>RazorMailMessage.Example</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <PackageId>Basecone.RazorMailMessage.Example</PackageId>
+    <RootNamespace>RazorMailMessage.Example</RootNamespace>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="RazorEngine, Version=3.3.0.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\RazorEngine.3.3.0\lib\net40\RazorEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <ProjectReference Include="..\RazorMailMessage\RazorMailMessage.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <EmbeddedResource Include="MailTemplates\SendMailMessageWithEmbeddedImage\MailLayout.cshtml" />
-    <EmbeddedResource Include="MailTemplates\SendMailMessageWithEmbeddedImage\TestTemplate.cshtml" />
-    <EmbeddedResource Include="MailTemplates\SendMailMessageWithEmbeddedImage\TestTemplate.text.cshtml" />
-    <EmbeddedResource Include="MailTemplates\SendMailMessageWithDefaultSettings\TestTemplate.cshtml" />
-    <EmbeddedResource Include="MailTemplates\SendMailMessageWithSpecificAssemblyAndNameSpace\TestTemplate.cshtml" />
-    <EmbeddedResource Include="MailTemplates\SendMailMessageWithLayoutAndSections\MailLayout.cshtml" />
-    <EmbeddedResource Include="MailTemplates\SendMailMessageWithLayoutAndSections\TestTemplate.cshtml" />
-    <EmbeddedResource Include="MailTemplates\SendMailMessageWithLayoutAndSections\TestTemplate.text.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\RazorMailMessage\RazorMailMessage.csproj">
-      <Project>{7ee1fcb6-d017-4dda-b650-ed2d0a888337}</Project>
-      <Name>RazorMailMessage</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="MailTemplates\SendMailMessageWithEmbeddedImage\chuck_mailheader.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
