@@ -1,88 +1,20 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F718B627-F5E3-4285-B021-122D48E69D01}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RazorMailMessage.Tests</RootNamespace>
+    <TargetFramework>net462</TargetFramework>
+    <PackageId>Basecone.RazorMailMessage.Tests</PackageId>
     <AssemblyName>RazorMailMessage.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <RootNamespace>RazorMailMessage.Tests</RootNamespace>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Moq">
-      <HintPath>..\..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="RazorEngine, Version=3.3.0.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\RazorEngine.3.3.0\lib\net40\RazorEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.0.0" />
+    <PackageReference Include="Moq" Version="4.0.10827" />
+    <PackageReference Include="NUnit" Version="2.6.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RazorMailMessage\RazorMailMessage.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System.Runtime.Caching" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="DefaultTemplateResolverTests.cs" />
-    <Compile Include="InMemoryTemplateCacheTests.cs" />
-    <Compile Include="IntegrationTests.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RazorMailFactoryTests.cs" />
-    <Compile Include="TemplateBaseTests.cs" />
-    <Compile Include="Utils\StringUtil.cs" />
-    <Compile Include="Utils\BaseTestFixture.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-    <EmbeddedResource Include="TestTemplates\TestTemplate.cshtml" />
-    <EmbeddedResource Include="TestTemplates\TestTemplate.text.cshtml" />
-    <EmbeddedResource Include="TestTemplates\TestLayout.cshtml" />
-    <EmbeddedResource Include="TestTemplates\IntegrationTest\TestLayout.cshtml" />
-    <EmbeddedResource Include="TestTemplates\IntegrationTest\TestTemplate.cshtml" />
-    <EmbeddedResource Include="TestTemplates\IntegrationTest\TestTemplate.text.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\RazorMailMessage\RazorMailMessage.csproj">
-      <Project>{7EE1FCB6-D017-4DDA-B650-ED2D0A888337}</Project>
-      <Name>RazorMailMessage</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="TestTemplates\IntegrationTest\chuck_mailheader.png" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
